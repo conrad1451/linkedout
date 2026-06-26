@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1584" height="396" viewBox="0 0 1584 396" role="img" aria-labelledby="title">
+  <title>LinkedIn-style default profile cover</title>
+  <rect width="1584" height="396" fill="#536466" />
+  <rect width="1584" height="396" fill="#5c6d6f" opacity="0.18" />
+  <circle cx="182" cy="198" r="790" fill="#637476" />
+  <circle cx="182" cy="198" r="558" fill="#5c6d6f" opacity="0.78" />
+  <rect x="910" width="190" height="396" fill="#3d484b" opacity="0.72" />
+  <rect x="1100" width="484" height="396" fill="#556668" />
+  <path d="M0 0h1584v396H0z" fill="url(#soft-shadow)" opacity="0.28" />
+  <defs>
+    <linearGradient id="soft-shadow" x1="0" y1="0" x2="1584" y2="396" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.1" />
+      <stop offset="0.46" stop-color="#ffffff" stop-opacity="0" />
+      <stop offset="0.66" stop-color="#253033" stop-opacity="0.22" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.03" />
+    </linearGradient>
+  </defs>
+</svg>

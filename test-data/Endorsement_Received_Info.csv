@@ -1,0 +1,101 @@
+Endorsement Date,Skill Name,Endorser First Name,Endorser Last Name,Endorser Public Url,Endorsement Status
+2025/12/16 10:41:04 UTC,Large Language Models (LLM),Joe,Smith,www.linkedin.com/in/joe-smith-0000,ACCEPTED
+2025/12/16 10:41:03 UTC,Public Speaking,Joe,Smith,www.linkedin.com/in/joe-smith-0000,ACCEPTED
+2025/12/16 10:41:01 UTC,Engineering Consulting,Joe,Smith,www.linkedin.com/in/joe-smith-0000,ACCEPTED
+2025/03/15 08:21:07 UTC,Cloud Computing,Ruby,Johnson,www.linkedin.com/in/ruby-johnson-0121,ACCEPTED
+2025/03/15 08:21:01 UTC,Site Reliability Engineering,Ruby,Johnson,www.linkedin.com/in/ruby-johnson-0121,ACCEPTED
+2025/03/15 08:20:51 UTC,Technical Drawing,Ruby,Johnson,www.linkedin.com/in/ruby-johnson-0121,ACCEPTED
+2025/03/15 08:20:44 UTC,Reliability Engineering,Ruby,Johnson,www.linkedin.com/in/ruby-johnson-0121,ACCEPTED
+2021/07/28 17:41:37 UTC,Straight Talk,Ava,Johnson,www.linkedin.com/in/ava-johnson-0103,ACCEPTED
+2021/07/28 17:41:33 UTC,Clear Communications,Ava,Johnson,www.linkedin.com/in/ava-johnson-0103,ACCEPTED
+2021/07/28 17:41:23 UTC,Leadership,Ava,Johnson,www.linkedin.com/in/ava-johnson-0103,ACCEPTED
+2021/07/28 17:41:17 UTC,Node.js,Ava,Johnson,www.linkedin.com/in/ava-johnson-0103,ACCEPTED
+2021/07/28 17:40:54 UTC,JavaScript,Ava,Johnson,www.linkedin.com/in/ava-johnson-0103,ACCEPTED
+2020/01/13 08:22:23 UTC,User Experience,Lucas,Johnson,www.linkedin.com/in/lucas-johnson-0108,ACCEPTED
+2020/01/13 08:21:56 UTC,Programming,Lucas,Johnson,www.linkedin.com/in/lucas-johnson-0108,ACCEPTED
+2020/01/13 08:21:47 UTC,Straight Talk,Lucas,Johnson,www.linkedin.com/in/lucas-johnson-0108,ACCEPTED
+2020/01/13 08:21:41 UTC,Clear Communications,Lucas,Johnson,www.linkedin.com/in/lucas-johnson-0108,ACCEPTED
+2020/01/13 08:21:35 UTC,Management,Lucas,Johnson,www.linkedin.com/in/lucas-johnson-0108,ACCEPTED
+2019/12/15 17:16:27 UTC,User Experience,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:16:22 UTC,CSS,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:16:17 UTC,JavaScript,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:16:05 UTC,Cascading Style Sheets (CSS),Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:15:56 UTC,Scrum,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:15:48 UTC,Product Management,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:15:42 UTC,Programming,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:15:34 UTC,Product Development,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:15:27 UTC,Software Development,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:15:15 UTC,Server Architecture,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:15:09 UTC,TypeScript,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:15:00 UTC,Clear Communications,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:14:53 UTC,Straight Talk,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:14:45 UTC,Leadership,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:13:56 UTC,Management,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:13:41 UTC,JSON,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:13:34 UTC,Amazon Web Services (AWS),Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/12/15 17:13:28 UTC,Node.js,Zoe,Johnson,www.linkedin.com/in/zoe-johnson-0109,ACCEPTED
+2019/08/28 13:39:17 UTC,Software Development,Henry,Johnson,www.linkedin.com/in/henry-johnson-0122,ACCEPTED
+2019/08/14 05:49:32 UTC,JavaScript,Ethan,Johnson,www.linkedin.com/in/ethan-johnson-0110,ACCEPTED
+2019/06/14 09:19:44 UTC,JavaScript,Stella,Johnson,www.linkedin.com/in/stella-johnson-0123,ACCEPTED
+2018/05/06 17:33:03 UTC,Cascading Style Sheets (CSS),Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:33:00 UTC,TypeScript,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:57 UTC,Node.js,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:54 UTC,Clear Communications,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:52 UTC,Straight Talk,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:50 UTC,Interaction Design,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:47 UTC,Management,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:45 UTC,XML,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:43 UTC,SQL,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:38 UTC,jQuery,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:32 UTC,Product Management,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:31 UTC,Mobile Devices,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:22 UTC,Programming,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:19 UTC,Mobile Applications,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:16 UTC,Software Development,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:15 UTC,Product Development,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:12 UTC,Scrum,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:09 UTC,User Interface Design,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:06 UTC,User Experience,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:04 UTC,CSS,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2018/05/06 17:32:01 UTC,JavaScript,Jacob,Johnson,www.linkedin.com/in/jacob-johnson-0116,ACCEPTED
+2017/04/01 08:43:12 UTC,TypeScript,Owen,Johnson,www.linkedin.com/in/owen-johnson-0124,ACCEPTED
+2017/04/01 08:43:12 UTC,Clear Communications,Owen,Johnson,www.linkedin.com/in/owen-johnson-0124,ACCEPTED
+2017/04/01 08:43:10 UTC,Node.js,Owen,Johnson,www.linkedin.com/in/owen-johnson-0124,ACCEPTED
+2017/04/01 08:43:10 UTC,Straight Talk,Owen,Johnson,www.linkedin.com/in/owen-johnson-0124,ACCEPTED
+2017/02/25 06:59:14 UTC,Node.js,Iris,Johnson,www.linkedin.com/in/iris-johnson-0125,ACCEPTED
+2017/02/25 06:59:12 UTC,Programming,Iris,Johnson,www.linkedin.com/in/iris-johnson-0125,ACCEPTED
+2017/02/25 06:59:11 UTC,jQuery,Iris,Johnson,www.linkedin.com/in/iris-johnson-0125,ACCEPTED
+2017/02/25 06:59:09 UTC,Interaction Design,Iris,Johnson,www.linkedin.com/in/iris-johnson-0125,ACCEPTED
+2017/02/25 06:59:01 UTC,Clear Communications,Iris,Johnson,www.linkedin.com/in/iris-johnson-0125,ACCEPTED
+2017/02/25 06:58:59 UTC,Mobile Devices,Iris,Johnson,www.linkedin.com/in/iris-johnson-0125,ACCEPTED
+2017/02/25 06:58:57 UTC,TypeScript,Iris,Johnson,www.linkedin.com/in/iris-johnson-0125,ACCEPTED
+2017/02/25 06:58:55 UTC,Software Development,Iris,Johnson,www.linkedin.com/in/iris-johnson-0125,ACCEPTED
+2017/02/25 06:58:54 UTC,Product Development,Iris,Johnson,www.linkedin.com/in/iris-johnson-0125,ACCEPTED
+2017/02/25 06:58:53 UTC,User Interface Design,Iris,Johnson,www.linkedin.com/in/iris-johnson-0125,ACCEPTED
+2017/02/25 06:58:48 UTC,User Experience,Iris,Johnson,www.linkedin.com/in/iris-johnson-0125,ACCEPTED
+2017/02/25 06:58:46 UTC,CSS,Iris,Johnson,www.linkedin.com/in/iris-johnson-0125,ACCEPTED
+2017/02/25 06:58:45 UTC,JavaScript,Iris,Johnson,www.linkedin.com/in/iris-johnson-0125,ACCEPTED
+2016/09/27 15:43:33 UTC,Cascading Style Sheets (CSS),Owen,Johnson,www.linkedin.com/in/owen-johnson-0124,ACCEPTED
+2016/09/27 15:43:33 UTC,XML,Owen,Johnson,www.linkedin.com/in/owen-johnson-0124,ACCEPTED
+2016/08/18 13:47:09 UTC,JavaScript,Leo,Johnson,www.linkedin.com/in/leo-johnson-0126,ACCEPTED
+2016/08/14 14:22:25 UTC,Software Development,Chloe,Johnson,www.linkedin.com/in/chloe-johnson-0127,ACCEPTED
+2016/08/14 14:22:20 UTC,JavaScript,Chloe,Johnson,www.linkedin.com/in/chloe-johnson-0127,ACCEPTED
+2016/08/12 12:55:52 UTC,jQuery,Sam,Johnson,www.linkedin.com/in/sam-johnson-0128,ACCEPTED
+2016/08/12 12:55:38 UTC,User Interface Design,Sam,Johnson,www.linkedin.com/in/sam-johnson-0128,ACCEPTED
+2016/08/12 12:55:36 UTC,User Experience,Sam,Johnson,www.linkedin.com/in/sam-johnson-0128,ACCEPTED
+2016/08/12 12:55:34 UTC,CSS,Sam,Johnson,www.linkedin.com/in/sam-johnson-0128,ACCEPTED
+2016/08/12 12:55:32 UTC,JavaScript,Sam,Johnson,www.linkedin.com/in/sam-johnson-0128,ACCEPTED
+2016/06/07 13:33:53 UTC,Mobile Devices,Grace,Johnson,www.linkedin.com/in/grace-johnson-0129,ACCEPTED
+2016/05/31 12:29:17 UTC,Mobile Devices,Max,Johnson,www.linkedin.com/in/max-johnson-0130,ACCEPTED
+2016/05/21 14:03:12 UTC,Mobile Devices,Owen,Johnson,www.linkedin.com/in/owen-johnson-0124,ACCEPTED
+2016/05/18 18:01:37 UTC,CSS,Sofia,Johnson,www.linkedin.com/in/sofia-johnson-0131,ACCEPTED
+2016/05/18 18:01:36 UTC,JavaScript,Sofia,Johnson,www.linkedin.com/in/sofia-johnson-0131,ACCEPTED
+2016/05/18 18:01:29 UTC,Product Management,Sofia,Johnson,www.linkedin.com/in/sofia-johnson-0131,ACCEPTED
+2016/05/18 18:01:27 UTC,User Experience,Sofia,Johnson,www.linkedin.com/in/sofia-johnson-0131,ACCEPTED
+2016/03/30 14:14:09 UTC,Programming,Max,Johnson,www.linkedin.com/in/max-johnson-0130,ACCEPTED
+2016/03/30 14:09:54 UTC,SQL,Max,Johnson,www.linkedin.com/in/max-johnson-0130,ACCEPTED
+2016/03/17 20:08:12 UTC,Software Development,Felix,Johnson,www.linkedin.com/in/felix-johnson-0132,ACCEPTED
+2016/03/17 20:08:05 UTC,JavaScript,Felix,Johnson,www.linkedin.com/in/felix-johnson-0132,ACCEPTED
+2016/03/16 20:20:24 UTC,SQL,Owen,Johnson,www.linkedin.com/in/owen-johnson-0124,ACCEPTED
+2016/03/16 20:17:35 UTC,Programming,Owen,Johnson,www.linkedin.com/in/owen-johnson-0124,ACCEPTED
+2016/03/12 20:23:06 UTC,Straight Talk,Layla,Johnson,www.linkedin.com/in/layla-johnson-0133,ACCEPTED

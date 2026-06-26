@@ -1,0 +1,20 @@
+*.zip
+!test-data.zip
+node_modules/
+Complete_LinkedInDataExport_*
+scripts/anonymize-mapping.json
+scripts/anonymize-owner.local.json
+
+# Build output
+dist/
+dist-extension/
+coverage/
+.vite/
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.DS_Store

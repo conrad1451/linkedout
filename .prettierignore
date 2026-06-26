@@ -1,0 +1,6 @@
+dist
+coverage
+node_modules
+package-lock.json
+test-data
+Complete_LinkedInDataExport_*
