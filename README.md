@@ -2,22 +2,11 @@
 
 Browse your LinkedIn data export locally in the browser. No server, no tracking — your data never leaves your machine.
 
+**NOTE: this project is coded by LLMs. While the runtime is strictly sandboxed and it works offline, I think you should know. Read the [privacy statement](./PRIVACY.md)**
+
 ## What It Does
 
-LinkedIn lets you [export your data](https://www.linkedin.com/help/linkedin/answer/a1339101), but the result is a ZIP full of CSV files — not exactly browsable. LinkedOut gives you a real UI on top of that export:
-
-- Browse your posts, comments, messages, connections, and more
-- Find old posts you might want to delete from your profile
-- Spot content that performed well and repost it
-- Get an overview of your overall LinkedIn activity
-- Every record links directly to the corresponding LinkedIn page so you can take action
-
-## How It Works
-
-1. [Request your LinkedIn data export](https://www.linkedin.com/help/linkedin/answer/a1339101) (choose the "Fast file" CSV format)
-2. Open LinkedOut, drag the ZIP onto the page
-3. Everything is parsed and stored in IndexedDB inside your browser
-4. **Your data never leaves your machine.** There is no server, no upload, no analytics.
+Read more [here](https://blog.alexewerlof.com/p/linkedout).
 
 ## Quick Start
 
@@ -67,23 +56,6 @@ Then open `chrome://extensions`, enable **Developer mode**, click **Load unpacke
 | ZIP      | `fflate` (browser-safe, sync)  |
 | Icons    | `lucide-react`                 |
 | Testing  | Vitest + React Testing Library |
-
-## Project Structure
-
-```
-src/
-  app/           Providers, router, layout shell
-  components/    Shared UI components
-  features/      Feature folders (dashboard, profile, activity, messages, network,
-                 import, raw) — each owns its routes, components, and helpers
-  hooks/         Shared React hooks
-  lib/           Pure, framework-free modules for CSV parsing, ZIP handling,
-                 schema definitions, and IndexedDB storage
-  platform/      Thin shims for web vs. Chrome extension targets
-extension/       Chrome extension manifest and background service worker
-test-data/       Anonymized canonical fixture export (committed, used for dev and tests)
-scripts/         Utility scripts (anonymization, ZIP generation, CSV tooling)
-```
 
 ## Privacy
 
