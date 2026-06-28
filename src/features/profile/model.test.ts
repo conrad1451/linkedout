@@ -76,9 +76,9 @@ describe('profile model', () => {
     });
     expect(activity[1]).toMatchObject({
       id: 'rich-media-0',
-      kind: 'post',
-      eyebrow: 'Uploaded Video',
-      mediaUrl: 'https://media.example/video',
+      kind: 'rich-media',
+      eyebrow: 'Rich media',
+      href: 'https://media.example/video',
     });
   });
 

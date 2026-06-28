@@ -6,6 +6,7 @@ export type ActivityKind =
   | 'comment'
   | 'reaction'
   | 'repost'
+  | 'rich-media'
   | 'job'
   | 'ad'
   | 'saved-item'
@@ -230,19 +231,15 @@ export function makeActivities(input: {
     eyebrow: 'Posted',
     mediaUrl: text(row, 'MediaUrl') || text(row, 'SharedUrl'),
   }));
-  const richMedia = input.richMedia.map((row) => {
-    const mediaType = richMediaType(row);
-
-    return {
-      id: `rich-media-${row.__row}`,
-      kind: 'post' as const,
-      date: text(row, 'Date/Time'),
-      dateTemporal: row.__dates?.['Date/Time'],
-      text: text(row, 'Media Description') || `Uploaded a ${mediaType}`,
-      eyebrow: `Uploaded ${titleCase(mediaType)}`,
-      mediaUrl: text(row, 'Media Link'),
-    };
-  });
+  const richMedia = input.richMedia.map((row) => ({
+    id: `rich-media-${row.__row}`,
+    kind: 'rich-media' as const,
+    date: text(row, 'Date/Time'),
+    dateTemporal: row.__dates?.['Date/Time'],
+    href: text(row, 'Media Link'),
+    text: meaningfulText(row, 'Media Description') || 'Media',
+    eyebrow: 'Rich media',
+  }));
   const comments = input.comments.map((row) => ({
     id: `comment-${row.__row}`,
     kind: 'comment' as const,
@@ -730,15 +727,6 @@ export function titleCase(value: string): string {
     .join(' ');
 }
 
-function richMediaType(row: DatasetRow): string {
-  const match = text(row, 'Date/Time').match(/^You uploaded a (.+?) on /i);
-  const value = match?.[1]
-    ?.replace(/^feed\s+/i, '')
-    .trim()
-    .toLowerCase();
-  return value || 'media item';
-}
-
 function voteSummary(optionText: string): string {
   return optionText ? `Voted: ${optionText}` : 'Voted in a poll';
 }
@@ -749,6 +737,11 @@ function compactName(...parts: string[]): string {
 
 function hasRowText(row: DatasetRow | undefined, key: string): boolean {
   return text(row, key).length > 0;
+}
+
+function meaningfulText(row: DatasetRow, key: string): string {
+  const raw = text(row, key).trim();
+  return raw && raw !== '-' ? raw : '';
 }
 
 function normalizeLinkedInHref(value: string): string | undefined {

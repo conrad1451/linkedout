@@ -2,6 +2,7 @@ import {
   ExternalLink,
   FileText,
   Hash,
+  Image,
   MessageSquare,
   Repeat2,
   Users,
@@ -686,6 +687,36 @@ export function ActivityCard({
                     }}
                   />
                 ) : null}
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    );
+  }
+
+  if (activity.kind === 'rich-media') {
+    const title = activity.text || 'Media';
+
+    return (
+      <article className="rounded-box border border-base-300 bg-base-100 shadow-sm overflow-hidden">
+        <div className="flex gap-3 p-4">
+          <div className="inline-flex shrink-0 items-center justify-center rounded-full bg-base-300 text-base-content h-12 w-12">
+            <Image className="h-5 w-5 opacity-70" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate font-semibold">
+                    <ExternalLinkText href={activity.href}>{title}</ExternalLinkText>
+                    {!activity.href && title}
+                  </h3>
+                  <span className="badge badge-xs badge-info">Media</span>
+                </div>
+                <p className="text-xs opacity-70">
+                  <RelativeTimeText value={parseActivityDate(activity)} />
+                </p>
               </div>
             </div>
           </div>

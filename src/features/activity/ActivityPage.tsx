@@ -1,5 +1,6 @@
 import {
   FileText,
+  Image,
   MessageSquare,
   Repeat2,
   ThumbsUp,
@@ -396,6 +397,7 @@ function ActivityRail({
       children: [
         { filter: 'post', label: 'Posts', Icon: FileText },
         { filter: 'comment', label: 'Comments', Icon: MessageSquare },
+        { filter: 'rich-media', label: 'Rich media', Icon: Image },
       ],
     },
     {
@@ -591,7 +593,8 @@ function ActivityRail({
       filter === 'connection' ||
       filter === 'member-follow' ||
       filter === 'company-follow' ||
-      filter === 'learning'
+      filter === 'learning' ||
+      filter === 'security-logins'
     )
       return 'badge-success';
     // Accent
@@ -606,17 +609,13 @@ function ActivityRail({
       filter === 'receipts'
     )
       return 'badge-accent';
-    // Success
-    if (
-      filter === 'connection' ||
-      filter === 'member-follow' ||
-      filter === 'company-follow' ||
-      filter === 'learning' ||
-      filter === 'security-logins'
-    )
-      return 'badge-success';
     // Info
-    if (filter === 'event' || filter === 'account-email-updates' || filter === 'account-created')
+    if (
+      filter === 'event' ||
+      filter === 'account-email-updates' ||
+      filter === 'account-created' ||
+      filter === 'rich-media'
+    )
       return 'badge-info';
     // Error
     if (filter === 'connection-imported' || filter === 'security-challenges' || filter === 'ad')
@@ -676,6 +675,7 @@ function filterFromParams(value: string | null): ActivityFilter {
     value === 'content' ||
     value === 'reaction' ||
     value === 'repost' ||
+    value === 'rich-media' ||
     value === 'connections' ||
     value === 'engagement' ||
     value === 'connection-imported' ||
@@ -795,6 +795,7 @@ function activityFilterLabel(filter: ActivityFilter): string {
   if (filter === 'content') return 'content';
   if (filter === 'reaction') return 'reactions';
   if (filter === 'repost') return 'reposts';
+  if (filter === 'rich-media') return 'rich media';
   if (filter === 'connections') return 'connection activity';
   if (filter === 'engagement') return 'engagement';
   if (filter === 'job') return 'jobs';
@@ -839,6 +840,7 @@ function countByKind(items: ActivityItem[]): Record<ActivityFilter, number> {
     all: 0,
     post: 0,
     comment: 0,
+    'rich-media': 0,
     content: 0,
     reaction: 0,
     repost: 0,
@@ -882,7 +884,7 @@ function countByKind(items: ActivityItem[]): Record<ActivityFilter, number> {
   return items.reduce((counts, item) => {
     counts.all += 1;
     counts[item.kind] = (counts[item.kind] ?? 0) + 1;
-    if (item.kind === 'post' || item.kind === 'comment') {
+    if (item.kind === 'post' || item.kind === 'comment' || item.kind === 'rich-media') {
       counts.content += 1;
     }
     if (
@@ -946,7 +948,7 @@ function countByKind(items: ActivityItem[]): Record<ActivityFilter, number> {
 function matchesActivityFilter(item: ActivityItem, filter: ActivityFilter): boolean {
   if (filter === 'all') return true;
   if (filter === 'content') {
-    return item.kind === 'post' || item.kind === 'comment';
+    return item.kind === 'post' || item.kind === 'comment' || item.kind === 'rich-media';
   }
   if (filter === 'engagement') {
     return (
