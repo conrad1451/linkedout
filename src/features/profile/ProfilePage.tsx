@@ -23,7 +23,7 @@ import { useMemo, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useActiveImport } from '../../app/useImports';
 import { EmptyState } from '../../components/EmptyState';
-import { OpenOnLinkedInLink } from '../../components/OpenOnLinkedInLink';
+
 import { RecommendationRow } from '../../components/RecommendationRow';
 import { ipGeolocationUrl } from '../../lib/ip-geolocation';
 import type { DatasetRow } from '../../lib/store';
@@ -514,6 +514,12 @@ function SkillsSection({ data }: { data: ProfileData }) {
     <ProfileCard
       id="skills"
       title="Skills"
+      action={
+        <LinkedInEditButton
+          href={linkedInProfileSectionUrl(data.linkedInProfile, 'skills')}
+          label="Edit skills on LinkedIn"
+        />
+      }
       footer={
         sortedSkills.length > MAX_PROFILE_SKILL_ITEMS && (
           <ShowAllToggleButton
@@ -599,11 +605,9 @@ function RecommendationsSection({
       id="recommendations"
       title="Recommendations"
       action={
-        <OpenOnLinkedInLink
+        <LinkedInEditButton
           href={linkedInProfileSectionUrl(linkedInProfile, 'recommendations')}
-          format="long"
-          size="sm"
-          label="Open recommendations on LinkedIn"
+          label="Edit recommendations on LinkedIn"
         />
       }
       footer={
