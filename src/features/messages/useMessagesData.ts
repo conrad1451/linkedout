@@ -71,7 +71,6 @@ export function useMessagesData(importMeta: ImportMeta | null): UseMessagesDataS
 
         if (!cancelled) setState({ data, loading: false, error: null });
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.error('[useMessagesData] load failed', error);
         if (!cancelled) {
           setState({

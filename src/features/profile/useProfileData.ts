@@ -216,7 +216,6 @@ export function useProfileData(importMeta: ImportMeta | null): UseProfileDataSta
 
         if (!cancelled) setState({ data: next, loading: false, error: null });
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.error('[useProfileData] load failed', error);
         if (!cancelled) {
           setState({

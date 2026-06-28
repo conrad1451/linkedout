@@ -64,7 +64,6 @@ export function useDataset(
         ]);
         if (!cancelled) setState({ rows, total, loading: false, error: null });
       } catch (e) {
-        // eslint-disable-next-line no-console
         console.error('[useDataset] query failed', e);
         if (!cancelled)
           setState({

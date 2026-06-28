@@ -12,21 +12,21 @@ export async function extractExport(
   try {
     bytes = await toBytes(source);
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error('[zip] failed to convert source to bytes', e);
     throw e;
   }
   // Diagnostic: log size and magic bytes to help debug hangs
   try {
-    // eslint-disable-next-line no-console
     console.info('[zip] bytes', { length: bytes.length, sig: Array.from(bytes.slice(0, 4)) });
-  } catch {}
+  } catch {
+    // Ignore diagnostic failures — logging should never break the import flow
+  }
 
   const unzipped = await new Promise<Unzipped>((resolve, reject) => {
     let settled = false;
     const timer = setTimeout(() => {
       if (settled) return;
-      // eslint-disable-next-line no-console
+
       console.warn('[zip] unzip callback not invoked within 5000ms — attempting sync fallback');
       try {
         const syncResult = unzipSync(bytes);
@@ -34,7 +34,6 @@ export async function extractExport(
         clearTimeout(timer);
         resolve(syncResult as Unzipped);
       } catch (syncErr) {
-        // eslint-disable-next-line no-console
         console.error('[zip] sync unzip fallback failed', syncErr);
         settled = true;
         clearTimeout(timer);
@@ -54,7 +53,7 @@ export async function extractExport(
       if (settled) return;
       settled = true;
       clearTimeout(timer);
-      // eslint-disable-next-line no-console
+
       console.error('[zip] unzip threw synchronously', e);
       reject(e);
     }

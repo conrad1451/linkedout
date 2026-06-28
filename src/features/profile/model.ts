@@ -110,7 +110,7 @@ export function parseWebsites(value: string): WebsiteLink[] {
   const normalized = value.trim().replace(/^\[/, '').replace(/\]$/, '');
   if (!normalized) return [];
 
-  const matches = [...normalized.matchAll(/([^,\[\]]+?):(https?:\/\/[^,\]]+)/gi)].map((match) => ({
+  const matches = [...normalized.matchAll(/([^,[\]]+?):(https?:\/\/[^,\]]+)/gi)].map((match) => ({
     label: titleCase(match[1]?.trim() || 'Website'),
     href: match[2]?.trim() || '',
   }));

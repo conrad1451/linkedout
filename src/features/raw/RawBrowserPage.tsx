@@ -21,9 +21,8 @@ export function RawBrowserPage() {
   const { datasetId: legacyDatasetId } = useParams<{ datasetId?: string }>();
   const [searchParams] = useSearchParams();
   const [query, setQuery] = useState('');
-  const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({});
 
-  const datasets = active?.datasets ?? [];
+  const datasets = useMemo(() => active?.datasets ?? [], [active?.datasets]);
   const tree = useMemo(() => buildFileTree(datasets), [datasets]);
   const fallbackDatasetId = firstDatasetId(tree) ?? datasets[0]?.datasetId ?? null;
   const requestedDatasetId = searchParams.get('dataset') ?? legacyDatasetId ?? fallbackDatasetId;
@@ -37,33 +36,41 @@ export function RawBrowserPage() {
   const filteredTree = useMemo(() => filterTree(tree, normalizedQuery), [tree, normalizedQuery]);
   const matchingFileCount = useMemo(() => countDatasets(filteredTree), [filteredTree]);
 
+  // Derive stored open-folders from localStorage — synchronous read, no effect needed
+  const storedOpenFolders = useMemo(() => readOpenFolders(active?.id ?? null), [active?.id]);
+
+  // Auto-expand ancestor folders for the selected dataset
+  const autoExpandPaths = useMemo(() => {
+    if (!selectedDataset) return new Set<string>();
+    const paths = folderPathsForFilename(selectedDataset.filename);
+    return new Set(paths);
+  }, [selectedDataset]);
+
+  // Manual folder toggles by the user (stored as explicit overrides)
+  const [manualToggles, setManualToggles] = useState<Record<string, boolean>>({});
+
+  // Reset manual toggles when the import changes
   useEffect(() => {
-    setOpenFolders(readOpenFolders(active?.id ?? null));
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting derived state when import identity changes
+    setManualToggles({});
   }, [active?.id]);
 
+  // Merge all sources into the effective open-folders map
+  const openFolders = useMemo(() => {
+    const result: Record<string, boolean> = { ...storedOpenFolders };
+    for (const path of autoExpandPaths) {
+      result[path] = true;
+    }
+    for (const [path, value] of Object.entries(manualToggles)) {
+      result[path] = value;
+    }
+    return result;
+  }, [storedOpenFolders, autoExpandPaths, manualToggles]);
+
+  // Persist effective open-folders back to localStorage (write-only, no setState)
   useEffect(() => {
     writeOpenFolders(active?.id ?? null, openFolders);
   }, [active?.id, openFolders]);
-
-  useEffect(() => {
-    if (!selectedDataset) return;
-
-    const folderPaths = folderPathsForFilename(selectedDataset.filename);
-    if (folderPaths.length === 0) return;
-
-    setOpenFolders((current) => {
-      let changed = false;
-      const next = { ...current };
-
-      for (const path of folderPaths) {
-        if (next[path] === true) continue;
-        next[path] = true;
-        changed = true;
-      }
-
-      return changed ? next : current;
-    });
-  }, [selectedDataset]);
 
   if (!active) {
     return (
@@ -154,9 +161,9 @@ export function RawBrowserPage() {
                   selectedDatasetId={selectedDataset?.datasetId ?? null}
                   onSelect={(datasetId) => updateView({ datasetId, page: 0 })}
                   onToggleFolder={(path) =>
-                    setOpenFolders((current) => ({
+                    setManualToggles((current) => ({
                       ...current,
-                      [path]: !(current[path] ?? true),
+                      [path]: !(openFolders[path] ?? true),
                     }))
                   }
                 />

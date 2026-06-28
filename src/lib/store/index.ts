@@ -16,7 +16,7 @@ let __diagTokenMs = 0;
 
 function nowMs(): number {
   // prefer high-resolution timer when available
-  // eslint-disable-next-line no-restricted-globals
+
   return typeof performance !== 'undefined' && typeof performance.now === 'function'
     ? performance.now()
     : Date.now();
@@ -297,7 +297,6 @@ export async function createImport(
         try {
           const diag = snapshotDiagnostics();
           if (diag.count > 0) {
-            // eslint-disable-next-line no-console
             console.trace('[import diagnostics] chunk', {
               dataset: dataset.datasetId,
               filename: dataset.filename,
@@ -309,7 +308,6 @@ export async function createImport(
             });
           }
         } catch (e) {
-          // eslint-disable-next-line no-console
           console.trace('[import diagnostics] failed to snapshot diagnostics', e);
         }
         await options.onProgress?.({
@@ -337,7 +335,9 @@ export async function createImport(
     // ensure DB is closed if not already
     try {
       db.close();
-    } catch {}
+    } catch {
+      // DB already closed — nothing to do
+    }
   }
 
   const meta: ImportMeta = {
