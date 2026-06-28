@@ -415,8 +415,12 @@ export function ActivityCard({
   }
 
   if (activity.subtype === 'security-challenge') {
-    const challengeType = activity.targetName || activity.text || 'Security challenge';
-    const country = activity.text && activity.text !== challengeType ? activity.text : '';
+    const ipDisplay =
+      activity.challengeIp || activity.targetName || activity.text || 'Security challenge';
+    const country =
+      activity.text && activity.text !== (activity.targetName || activity.text)
+        ? activity.text
+        : '';
 
     return (
       <article className="rounded-box border border-base-300 bg-base-100 shadow-sm overflow-hidden">
@@ -428,31 +432,36 @@ export function ActivityCard({
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="truncate font-semibold">{challengeType}</h3>
+                  <h3 className="truncate font-semibold tabular-nums">
+                    {ipDisplay}
+                    {activity.challengeIp ? (
+                      <>
+                        {' '}
+                        <a
+                          href={ipGeolocationUrl(activity.challengeIp)}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="inline-flex items-center align-middle hover:text-primary"
+                          title={`Look up IP ${activity.challengeIp}`}
+                          aria-label={`Look up IP ${activity.challengeIp} on ipgeolocation.io`}
+                        >
+                          <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                        </a>
+                      </>
+                    ) : null}
+                  </h3>
                   <span className="badge badge-xs badge-error">Challenge</span>
                   {country ? <span className="badge badge-ghost badge-xs">{country}</span> : null}
                 </div>
                 <p className="text-xs opacity-70">
                   <RelativeTimeText value={parseActivityDate(activity)} />
                 </p>
-                {activity.challengeIp ? (
-                  <p className="mt-1 text-xs tabular-nums">
-                    IP: {activity.challengeIp}{' '}
-                    <a
-                      href={ipGeolocationUrl(activity.challengeIp)}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="inline-flex items-center align-middle hover:text-primary"
-                      title={`Look up IP ${activity.challengeIp}`}
-                      aria-label={`Look up IP ${activity.challengeIp} on ipgeolocation.io`}
-                    >
-                      <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                    </a>
-                  </p>
-                ) : null}
                 {activity.challengeUserAgent ? (
-                  <p className="mt-0.5 text-xs opacity-60 break-all">
-                    {activity.challengeUserAgent}
+                  <p className="mt-1 text-xs break-all">{activity.challengeUserAgent}</p>
+                ) : null}
+                {activity.targetName ? (
+                  <p className="mt-1 text-xs">
+                    <span className="font-semibold">Type:</span> {activity.targetName}
                   </p>
                 ) : null}
               </div>
@@ -464,6 +473,8 @@ export function ActivityCard({
   }
 
   if (activity.subtype === 'security-login') {
+    const ipDisplay = activity.loginIp || activity.targetName || 'Login';
+
     return (
       <article className="rounded-box border border-base-300 bg-base-100 shadow-sm overflow-hidden">
         <div className="flex gap-3 p-4">
@@ -474,29 +485,31 @@ export function ActivityCard({
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="truncate font-semibold">{activity.targetName || 'Login'}</h3>
+                  <h3 className="truncate font-semibold tabular-nums">
+                    {ipDisplay}
+                    {activity.loginIp ? (
+                      <>
+                        {' '}
+                        <a
+                          href={ipGeolocationUrl(activity.loginIp)}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="inline-flex items-center align-middle hover:text-primary"
+                          title={`Look up IP ${activity.loginIp}`}
+                          aria-label={`Look up IP ${activity.loginIp} on ipgeolocation.io`}
+                        >
+                          <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                        </a>
+                      </>
+                    ) : null}
+                  </h3>
                   <span className="badge badge-xs badge-success">Login</span>
                 </div>
                 <p className="text-xs opacity-70">
                   <RelativeTimeText value={parseActivityDate(activity)} />
                 </p>
-                {activity.loginIp ? (
-                  <p className="mt-1 text-xs tabular-nums">
-                    IP: {activity.loginIp}{' '}
-                    <a
-                      href={ipGeolocationUrl(activity.loginIp)}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="inline-flex items-center align-middle hover:text-primary"
-                      title={`Look up IP ${activity.loginIp}`}
-                      aria-label={`Look up IP ${activity.loginIp} on ipgeolocation.io`}
-                    >
-                      <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                    </a>
-                  </p>
-                ) : null}
                 {activity.loginUserAgent ? (
-                  <p className="mt-0.5 text-xs opacity-60 break-all">{activity.loginUserAgent}</p>
+                  <p className="mt-1 text-xs break-all">{activity.loginUserAgent}</p>
                 ) : null}
               </div>
             </div>

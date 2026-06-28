@@ -541,7 +541,7 @@ export function makeActivities(input: {
     ...(input.securityChallenges ?? [])
       .filter((row) => hasRowText(row, 'Challenge Date'))
       .map((row) => {
-        const challengeType = titleCase(text(row, 'Challenge Type'));
+        const challengeType = text(row, 'Challenge Type');
         const country = text(row, 'Country');
         return {
           id: `security-challenge-${row.__row}`,

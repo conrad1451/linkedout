@@ -637,7 +637,7 @@ describe('ActivityPage', () => {
             subtype: 'security-challenge',
             date: '2025-01-10 00:00:00',
             dateTemporal: parseTemporalValue('2025-01-10 00:00:00'),
-            targetName: 'Linkedin App Challenge',
+            targetName: 'LINKEDIN_APP_CHALLENGE',
             text: 'Finland',
             eyebrow: 'Security challenge',
           },
@@ -738,7 +738,7 @@ describe('ActivityPage', () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByText('Linkedin App Challenge')).toBeInTheDocument();
+    expect(screen.getAllByText('LINKEDIN_APP_CHALLENGE').length).toBeGreaterThan(0);
     expect(screen.getByText('Finland')).toBeInTheDocument();
     expect(screen.queryByText('IP: 192.0.2.1')).not.toBeInTheDocument();
   });

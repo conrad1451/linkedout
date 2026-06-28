@@ -165,17 +165,17 @@ Uses a specialized compact layout with `ReactionIcon` and reaction type badge. V
 ### Security Challenges
 
 - Icon: `Shield`
-- Title: challenge type
-- Badge: country name (ghost)
-- Lines: IP Address, User Agent
+- Title: IP address (with geolocation lookup link via `ExternalLink` icon)
+- Badge: Challenge type + country name (ghost)
+- Body: User Agent (normal text color)
 - Fields: `challengeIp`, `challengeUserAgent`, `targetName` (type), `text` (country)
 
 ### Security Logins
 
 - Icon: `Shield`
-- Title: login type
-- Lines: IP Address, User Agent
-- Fields: `loginIp`, `loginUserAgent`, `targetName` (type)
+- Title: IP address (with geolocation lookup link via `ExternalLink` icon)
+- Body: User Agent (normal text color)
+- Fields: `loginIp`, `loginUserAgent`, `targetName` (type, fallback when IP missing)
 
 ### Security Verifications
 

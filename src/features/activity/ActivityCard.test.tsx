@@ -156,7 +156,7 @@ describe('ActivityCard', () => {
           subtype: 'security-challenge',
           date: '2025-06-15 10:30:00',
           dateTemporal: temporal,
-          targetName: 'App Challenge',
+          targetName: 'LINKEDIN_APP_CHALLENGE',
           text: 'Finland',
           challengeIp: '2.56.188.34',
           challengeUserAgent: 'Mozilla/5.0',
@@ -166,12 +166,14 @@ describe('ActivityCard', () => {
       />,
     );
 
-    expect(screen.getByText('IP: 2.56.188.34')).toBeInTheDocument();
+    expect(screen.getByText('2.56.188.34')).toBeInTheDocument();
     const ipLink = screen.getByRole('link', {
       name: 'Look up IP 2.56.188.34 on ipgeolocation.io',
     });
     expect(ipLink).toBeInTheDocument();
     expect(ipLink).toHaveAttribute('href', 'https://ipgeolocation.io/what-is-my-ip/2.56.188.34');
+    expect(screen.getByText('Type:')).toBeInTheDocument();
+    expect(screen.getByText('LINKEDIN_APP_CHALLENGE')).toBeInTheDocument();
   });
 
   it('renders security login card with IP geolocation link for IPv6', () => {
@@ -196,7 +198,7 @@ describe('ActivityCard', () => {
       />,
     );
 
-    expect(screen.getByText('IP: 2001:4860:4860::8888')).toBeInTheDocument();
+    expect(screen.getByText('2001:4860:4860::8888')).toBeInTheDocument();
     const ipLink = screen.getByRole('link', {
       name: 'Look up IP 2001:4860:4860::8888 on ipgeolocation.io',
     });
