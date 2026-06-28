@@ -655,7 +655,7 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
       <article className="rounded-box border border-base-300 bg-base-100 shadow-sm overflow-hidden">
         <div className="flex gap-3 p-4">
           <div className="inline-flex shrink-0 items-center justify-center rounded-full bg-base-300 text-base-content h-12 w-12">
-            <MessageSquare className="h-5 w-5 opacity-70" />
+            <Mail className="h-5 w-5 opacity-70" />
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
@@ -803,7 +803,7 @@ function iconFor(activity: ActivityItem) {
   if (activity.kind === 'account') return <Mail className="h-3.5 w-3.5" />;
   if (activity.kind === 'security') return <Shield className="h-3.5 w-3.5" />;
   if (activity.kind === 'search') return <Search className="h-3.5 w-3.5" />;
-  if (activity.kind === 'message') return <MessageSquare className="h-3.5 w-3.5" />;
+  if (activity.kind === 'message') return <Mail className="h-3.5 w-3.5" />;
   if (activity.kind === 'learning') return <GraduationCap className="h-3.5 w-3.5" />;
   if (activity.kind === 'connection') return <Users className="h-3.5 w-3.5" />;
   if (activity.kind === 'member-follow') return <UserPlus className="h-3.5 w-3.5" />;
