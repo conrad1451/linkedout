@@ -37,6 +37,7 @@ import { InitialsAvatar } from '../../components/InitialsAvatar';
 import { RelativeTimeText } from '../../components/RelativeTimeText';
 import { ReactionIcon } from './ReactionIcon';
 import { linkedInProfileSectionUrl, type LinkedInProfileInfo } from '../../lib/linkedin/profile';
+import { ipGeolocationUrl } from '../../lib/ip-geolocation';
 
 interface ActivityCardProps {
   activity: ActivityItem;
@@ -891,6 +892,50 @@ export function ActivityCard({
     );
   }
 
+  if (activity.subtype === 'account-registration') {
+    const ipDisplay = activity.registrationIp || 'Registered LinkedIn account';
+
+    return (
+      <article className="rounded-box border border-base-300 bg-base-100 shadow-sm overflow-hidden">
+        <div className="flex gap-3 p-4">
+          <div className="inline-flex shrink-0 items-center justify-center rounded-full bg-base-300 text-base-content h-12 w-12">
+            <Star className="h-5 w-5 opacity-70" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate font-semibold tabular-nums">
+                    {ipDisplay}
+                    {activity.registrationIp ? (
+                      <>
+                        {' '}
+                        <a
+                          href={ipGeolocationUrl(activity.registrationIp)}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="inline-flex items-center align-middle hover:text-primary"
+                          title={`Look up IP ${activity.registrationIp}`}
+                          aria-label={`Look up IP ${activity.registrationIp} on ipgeolocation.io`}
+                        >
+                          <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                        </a>
+                      </>
+                    ) : null}
+                  </h3>
+                  <span className="badge badge-xs badge-info">Account created</span>
+                </div>
+                <p className="text-xs opacity-70">
+                  <RelativeTimeText value={parseActivityDate(activity)} />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    );
+  }
+
   // Fallback rendering for other activity kinds (post, comment, repost, etc.)
   return (
     <article className="rounded-box border border-base-300 bg-base-100 shadow-sm overflow-hidden">
@@ -1117,10 +1162,6 @@ function searchTerm(text: string): string {
     term = term.slice(1, -1);
   }
   return term || text;
-}
-
-function ipGeolocationUrl(ip: string): string {
-  return `https://ipgeolocation.io/what-is-my-ip/${encodeURIComponent(ip)}`;
 }
 
 function parseActivityDate(activity: ActivityItem): Date | number | string {

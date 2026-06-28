@@ -429,12 +429,12 @@ describe('ActivityPage', () => {
 
     expect(screen.getAllByRole('button', { name: /Jobs/ }).length).toBeGreaterThan(0);
     expect(screen.getAllByRole('button', { name: /Misc/ }).length).toBeGreaterThan(0);
-    expect(screen.getAllByRole('button', { name: /Security/ }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('button', { name: /Account/ }).length).toBeGreaterThan(0);
     expect(screen.getByText('CTO')).toBeInTheDocument();
     expect(screen.getByText('Divio')).toBeInTheDocument();
     expect(screen.queryByText('joe@example.com')).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getAllByRole('button', { name: /Security/ })[0]!);
+    fireEvent.click(screen.getAllByRole('button', { name: /Account/ })[0]!);
 
     expect(await screen.findByText('joe@example.com')).toBeInTheDocument();
     expect(screen.queryByText('Applied to CTO at Divio')).not.toBeInTheDocument();

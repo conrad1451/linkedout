@@ -5,6 +5,7 @@ import {
   ChevronUp,
   BriefcaseBusiness,
   CalendarDays,
+  ExternalLink,
   GraduationCap,
   Languages,
   Link as LinkIcon,
@@ -24,6 +25,7 @@ import { useActiveImport } from '../../app/useImports';
 import { EmptyState } from '../../components/EmptyState';
 import { OpenOnLinkedInLink } from '../../components/OpenOnLinkedInLink';
 import { RecommendationRow } from '../../components/RecommendationRow';
+import { ipGeolocationUrl } from '../../lib/ip-geolocation';
 import type { DatasetRow } from '../../lib/store';
 import {
   linkedInProfileIntroEditUrl,
@@ -262,6 +264,7 @@ function AboutSection({ data }: { data: ProfileData }) {
   const summary = text(data.profile, 'Summary');
   const topSkills = data.skills.slice(0, 5).map((skill) => skill.name);
   const joinedOn = formatRowTemporal(data.registration, 'Registered At');
+  const registrationIp = data.registration ? text(data.registration, 'Registration Ip') : '';
 
   return (
     <ProfileCard
@@ -288,6 +291,21 @@ function AboutSection({ data }: { data: ProfileData }) {
                 On LinkedIn since
               </div>
               <p className="mt-1 text-sm opacity-80">{joinedOn}</p>
+              {registrationIp && (
+                <p className="mt-1 text-sm tabular-nums">
+                  {registrationIp}{' '}
+                  <a
+                    href={ipGeolocationUrl(registrationIp)}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="inline-flex items-center align-middle hover:text-primary"
+                    title={`Look up IP ${registrationIp}`}
+                    aria-label={`Look up IP ${registrationIp} on ipgeolocation.io`}
+                  >
+                    <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                  </a>
+                </p>
+              )}
             </div>
           )}
           {topSkills.length > 0 && (

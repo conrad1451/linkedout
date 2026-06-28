@@ -21,6 +21,8 @@ import {
   Bookmark,
   Mail,
   Shield,
+  Star,
+  User,
   Search,
   GraduationCap,
   Grape,
@@ -524,8 +526,8 @@ function ActivityRail({
     },
     {
       filter: 'security',
-      label: 'Security',
-      Icon: Shield,
+      label: 'Account',
+      Icon: User,
       children: [
         {
           filter: 'security-verifications',
@@ -536,6 +538,7 @@ function ActivityRail({
         { filter: 'security-logins', label: 'Logins', Icon: Shield },
         { filter: 'security-challenges', label: 'Challenges', Icon: Shield },
         { filter: 'account-email-updates', label: 'Email updates', menuLabel: 'Email', Icon: Mail },
+        { filter: 'account-created', label: 'Creation', Icon: Star },
       ],
     },
     {
@@ -547,7 +550,6 @@ function ActivityRail({
         { filter: 'ad', label: 'Ads clicked', Icon: Megaphone },
         { filter: 'receipts', label: 'Receipts', Icon: CreditCard },
         { filter: 'learning', label: 'Learning', Icon: GraduationCap },
-        { filter: 'account-created', label: 'Account creation', Icon: Mail },
       ],
     },
   ];
@@ -919,13 +921,7 @@ function countByKind(items: ActivityItem[]): Record<ActivityFilter, number> {
     ) {
       counts.misc += 1;
     }
-    if (
-      item.kind === 'security' ||
-      item.subtype === 'security-login' ||
-      item.subtype === 'security-challenge' ||
-      item.subtype === 'security-verification' ||
-      item.subtype === 'account-email-update'
-    ) {
+    if (item.subtype === 'account-email-update') {
       counts.security += 1;
     }
     if (item.subtype === 'job-applied') counts['job-applied'] += 1;

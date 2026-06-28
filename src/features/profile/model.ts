@@ -63,6 +63,7 @@ export interface ActivityItem {
   challengeUserAgent?: string;
   loginIp?: string;
   loginUserAgent?: string;
+  registrationIp?: string;
   verificationDetails?: Record<string, string>;
   importedContactDetails?: Record<string, string>;
 }
@@ -427,6 +428,7 @@ export function makeActivities(input: {
           ? `Registered LinkedIn account from ${text(row, 'Registration Ip')}`
           : 'Registered LinkedIn account',
         eyebrow: 'Account created',
+        registrationIp: text(row, 'Registration Ip') || undefined,
       })),
     ...(input.importedContacts ?? [])
       .filter((row) => hasRowText(row, 'CreatedAt'))
