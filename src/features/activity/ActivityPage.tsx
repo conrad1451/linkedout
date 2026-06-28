@@ -123,7 +123,13 @@ function ActivityPageContent({ data }: { data: ProfileData }) {
   const fromParam = searchParams.get('from');
   const toParam = searchParams.get('to');
   const selectedPeriod = periodFromRangeParams(fromParam, toParam);
-  const selectedYear: number | 'all' = selectedPeriod?.year ?? 'all';
+  const selectedYear: number | 'all' =
+    fromParam === 'all'
+      ? 'all'
+      : (selectedPeriod?.year ?? (fromParam === null ? new Date().getFullYear() : 'all'));
+  const effectivePeriod: TemporalMosaicPeriod | undefined =
+    selectedPeriod ??
+    (selectedYear !== 'all' ? { kind: 'year', year: selectedYear } : undefined);
   const mosaicSelection = selectedPeriod ? selectionFromPeriod(selectedPeriod) : undefined;
   const yearActivities =
     selectedYear === 'all'
@@ -138,9 +144,9 @@ function ActivityPageContent({ data }: { data: ProfileData }) {
       : yearActivities.filter((item) => matchesActivityFilter(item, filter));
   const countsByDay = bucketTimestampsByDay(typedYearActivities, activityDateTime);
   const filtered =
-    selectedYear === 'all'
+    selectedYear === 'all' || !effectivePeriod
       ? typedYearActivities
-      : filterByPeriod(typedYearActivities, selectedPeriod!);
+      : filterByPeriod(typedYearActivities, effectivePeriod);
   const pageRows = filtered.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
   const yearOptions: Array<number | 'all'> = ['all', ...years];
 
@@ -287,7 +293,7 @@ function ActivityPageContent({ data }: { data: ProfileData }) {
   function updateYear(next: number | 'all') {
     updateSearchParams((params) => {
       if (next === 'all') {
-        params.delete('from');
+        params.set('from', 'all');
         params.delete('to');
       } else {
         params.set('from', `${next}-01-01`);
@@ -297,9 +303,9 @@ function ActivityPageContent({ data }: { data: ProfileData }) {
   }
 
   function updateMonth(monthKey: string) {
-    if (selectedYear === 'all' || !selectedPeriod) return;
+    if (!effectivePeriod) return;
     updateSearchParams((params) => {
-      if (selectedPeriod.kind === 'month' && selectedPeriod.key === monthKey) {
+      if (effectivePeriod.kind === 'month' && effectivePeriod.key === monthKey) {
         // Toggle off → back to year view
         params.set('from', `${selectedYear}-01-01`);
         params.set('to', `${selectedYear}-12-31`);
@@ -314,9 +320,9 @@ function ActivityPageContent({ data }: { data: ProfileData }) {
   }
 
   function updateDay(dayKey: string) {
-    if (selectedYear === 'all' || !selectedPeriod) return;
+    if (!effectivePeriod) return;
     updateSearchParams((params) => {
-      if (selectedPeriod.kind === 'day' && selectedPeriod.key === dayKey) {
+      if (effectivePeriod.kind === 'day' && effectivePeriod.key === dayKey) {
         // Toggle off → back to year view
         params.set('from', `${selectedYear}-01-01`);
         params.set('to', `${selectedYear}-12-31`);
@@ -437,7 +443,7 @@ function ActivityRail({
     {
       filter: 'message',
       label: 'Messages',
-      Icon: MessageSquare,
+      Icon: Mail,
       children: [
         {
           filter: 'message-sent',
