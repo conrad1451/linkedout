@@ -143,4 +143,93 @@ describe('ActivityCard', () => {
     expect(desc).toBeTruthy();
     expect(desc!.textContent).toContain('Master SQL queries, joins, and window functions');
   });
+
+  it('renders security challenge card with IP geolocation link for IPv4', () => {
+    const temporal = parseTemporalValue('2025-06-15 10:30:00');
+    if (!temporal) throw new Error('Expected timestamp to parse');
+
+    render(
+      <ActivityCard
+        activity={{
+          id: 'challenge-1',
+          kind: 'security',
+          subtype: 'security-challenge',
+          date: '2025-06-15 10:30:00',
+          dateTemporal: temporal,
+          targetName: 'App Challenge',
+          text: 'Finland',
+          challengeIp: '2.56.188.34',
+          challengeUserAgent: 'Mozilla/5.0',
+          eyebrow: 'Security challenge',
+        }}
+        profileName="Test User"
+      />,
+    );
+
+    expect(screen.getByText('IP: 2.56.188.34')).toBeInTheDocument();
+    const ipLink = screen.getByRole('link', {
+      name: 'Look up IP 2.56.188.34 on ipgeolocation.io',
+    });
+    expect(ipLink).toBeInTheDocument();
+    expect(ipLink).toHaveAttribute('href', 'https://ipgeolocation.io/what-is-my-ip/2.56.188.34');
+  });
+
+  it('renders security login card with IP geolocation link for IPv6', () => {
+    const temporal = parseTemporalValue('2025-06-16 11:00:00');
+    if (!temporal) throw new Error('Expected timestamp to parse');
+
+    render(
+      <ActivityCard
+        activity={{
+          id: 'login-1',
+          kind: 'security',
+          subtype: 'security-login',
+          date: '2025-06-16 11:00:00',
+          dateTemporal: temporal,
+          targetName: 'Login',
+          text: '2001:4860:4860::8888',
+          loginIp: '2001:4860:4860::8888',
+          loginUserAgent: 'Mozilla/5.0',
+          eyebrow: 'Login',
+        }}
+        profileName="Test User"
+      />,
+    );
+
+    expect(screen.getByText('IP: 2001:4860:4860::8888')).toBeInTheDocument();
+    const ipLink = screen.getByRole('link', {
+      name: 'Look up IP 2001:4860:4860::8888 on ipgeolocation.io',
+    });
+    expect(ipLink).toBeInTheDocument();
+    // IPv6 colons should be URL-encoded as %3A
+    expect(ipLink).toHaveAttribute(
+      'href',
+      'https://ipgeolocation.io/what-is-my-ip/2001%3A4860%3A4860%3A%3A8888',
+    );
+  });
+
+  it('does not render IP geolocation link when IP is absent', () => {
+    const temporal = parseTemporalValue('2025-06-17 12:00:00');
+    if (!temporal) throw new Error('Expected timestamp to parse');
+
+    render(
+      <ActivityCard
+        activity={{
+          id: 'login-no-ip',
+          kind: 'security',
+          subtype: 'security-login',
+          date: '2025-06-17 12:00:00',
+          dateTemporal: temporal,
+          targetName: 'Login',
+          text: 'Login activity',
+          loginUserAgent: 'Mozilla/5.0',
+          eyebrow: 'Login',
+        }}
+        profileName="Test User"
+      />,
+    );
+
+    expect(screen.queryByText(/IP:/)).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /ipgeolocation/ })).not.toBeInTheDocument();
+  });
 });

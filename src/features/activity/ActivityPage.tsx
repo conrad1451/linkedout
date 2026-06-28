@@ -128,8 +128,7 @@ function ActivityPageContent({ data }: { data: ProfileData }) {
       ? 'all'
       : (selectedPeriod?.year ?? (fromParam === null ? new Date().getFullYear() : 'all'));
   const effectivePeriod: TemporalMosaicPeriod | undefined =
-    selectedPeriod ??
-    (selectedYear !== 'all' ? { kind: 'year', year: selectedYear } : undefined);
+    selectedPeriod ?? (selectedYear !== 'all' ? { kind: 'year', year: selectedYear } : undefined);
   const mosaicSelection = selectedPeriod ? selectionFromPeriod(selectedPeriod) : undefined;
   const yearActivities =
     selectedYear === 'all'
@@ -269,7 +268,12 @@ function ActivityPageContent({ data }: { data: ProfileData }) {
         ) : (
           <div className="space-y-4">
             {pageRows.map((activity) => (
-              <ActivityCard key={activity.id} activity={activity} profileName={name} />
+              <ActivityCard
+                key={activity.id}
+                activity={activity}
+                profileName={name}
+                linkedInProfile={data.linkedInProfile}
+              />
             ))}
           </div>
         )}
@@ -387,7 +391,7 @@ function ActivityRail({
   const rootItems: ActivityRailItem[] = [
     {
       filter: 'content',
-      label: 'Content',
+      label: 'Contents',
       Icon: FileText,
       children: [
         { filter: 'post', label: 'Posts', Icon: FileText },
@@ -396,7 +400,7 @@ function ActivityRail({
     },
     {
       filter: 'engagement',
-      label: 'Engagement',
+      label: 'Engagements',
       Icon: ThumbsUp,
       children: [
         { filter: 'reaction', label: 'Reactions', Icon: ThumbsUp },
@@ -411,7 +415,7 @@ function ActivityRail({
     },
     {
       filter: 'connections',
-      label: 'Connection',
+      label: 'Connections',
       Icon: Users,
       children: [
         {
@@ -468,13 +472,13 @@ function ActivityRail({
           filter: 'recommendation-given',
           label: 'Recommendations sent',
           menuLabel: 'Sent',
-          Icon: Quote,
+          Icon: ArrowRightFromLine,
         },
         {
           filter: 'recommendation-received',
           label: 'Recommendations received',
           menuLabel: 'Received',
-          Icon: Quote,
+          Icon: ArrowLeftToLine,
         },
       ],
     },
@@ -487,13 +491,13 @@ function ActivityRail({
           filter: 'endorsement-given',
           label: 'Endorsements sent',
           menuLabel: 'Sent',
-          Icon: Grape,
+          Icon: ArrowRightFromLine,
         },
         {
           filter: 'endorsement-received',
           label: 'Endorsements received',
           menuLabel: 'Received',
-          Icon: Grape,
+          Icon: ArrowLeftToLine,
         },
       ],
     },
@@ -546,9 +550,84 @@ function ActivityRail({
     },
   ];
 
+  const railBadgeClass = (filter: ActivityFilter) => {
+    // All — neutral
+    if (filter === 'all') return 'badge-neutral';
+    // Root nodes — ghost
+    if (
+      filter === 'content' ||
+      filter === 'engagement' ||
+      filter === 'connections' ||
+      filter === 'message' ||
+      filter === 'recommendations' ||
+      filter === 'endorsement' ||
+      filter === 'job' ||
+      filter === 'security' ||
+      filter === 'misc'
+    )
+      return 'badge-ghost';
+    // Secondary
+    if (
+      filter === 'post' ||
+      filter === 'search' ||
+      filter === 'endorsement-given' ||
+      filter === 'recommendation-given' ||
+      filter === 'message-sent'
+    )
+      return 'badge-secondary';
+    // Warning
+    if (
+      filter === 'comment' ||
+      filter === 'reaction' ||
+      filter === 'vote' ||
+      filter === 'repost' ||
+      filter === 'invitation-sent' ||
+      filter === 'job-applied' ||
+      filter === 'security-verifications'
+    )
+      return 'badge-warning';
+    // Success
+    if (
+      filter === 'connection' ||
+      filter === 'member-follow' ||
+      filter === 'company-follow' ||
+      filter === 'learning'
+    )
+      return 'badge-success';
+    // Accent
+    if (
+      filter === 'hashtag-follow' ||
+      filter === 'saved-item' ||
+      filter === 'job-saved' ||
+      filter === 'endorsement-received' ||
+      filter === 'recommendation-received' ||
+      filter === 'message-received' ||
+      filter === 'invitation-received' ||
+      filter === 'receipts'
+    )
+      return 'badge-accent';
+    // Success
+    if (
+      filter === 'connection' ||
+      filter === 'member-follow' ||
+      filter === 'company-follow' ||
+      filter === 'learning' ||
+      filter === 'security-logins'
+    )
+      return 'badge-success';
+    // Info
+    if (filter === 'event' || filter === 'account-email-updates' || filter === 'account-created')
+      return 'badge-info';
+    // Error
+    if (filter === 'connection-imported' || filter === 'security-challenges' || filter === 'ad')
+      return 'badge-error';
+    return 'badge-ghost';
+  };
+
   const renderRailItem = (item: ActivityRailItem) => {
     const active = activeFilter === item.filter;
     const count = counts[item.filter];
+    const badgeColor = railBadgeClass(item.filter);
     return (
       <li key={item.filter}>
         <button
@@ -569,7 +648,7 @@ function ActivityRail({
             <span className="truncate">{item.label}</span>
           )}
           {count > 0 ? (
-            <span className="badge badge-ghost badge-sm ml-auto tabular-nums">
+            <span className={`badge badge-sm ml-auto tabular-nums ${badgeColor}`}>
               {count.toLocaleString()}
             </span>
           ) : null}

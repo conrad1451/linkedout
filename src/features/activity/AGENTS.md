@@ -234,6 +234,8 @@ Uses a specialized compact layout with `ReactionIcon` and reaction type badge. V
 
 Uses `InitialsAvatar` + person name as title + headline + eyebrow line + quote body. Separate from endorsements — recommendations carry longer text bodies.
 
+- Badges: "Given"/"Received" direction (`badge-xs`), status like "Visible"/"Pending" (`badge-sm badge-ghost`)
+
 ### Connections / Member Follows
 
 Delegates to `PersonRow` shared component.

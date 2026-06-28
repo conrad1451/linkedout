@@ -11,6 +11,7 @@ export function InvitationRow({
   date,
   direction,
   avatarClassName,
+  badge,
 }: {
   name: string;
   href?: string;
@@ -19,6 +20,7 @@ export function InvitationRow({
   date?: string;
   direction?: 'incoming' | 'outgoing';
   avatarClassName?: string;
+  badge?: React.ReactNode;
 }) {
   const timePrefix = direction === 'incoming' ? 'Received' : 'Sent';
 
@@ -31,7 +33,12 @@ export function InvitationRow({
           className={avatarClassName ?? 'bg-base-300 text-base-content ring-1 ring-base-300'}
         />
       }
-      title={<LinkedInName name={name} href={href ?? ''} />}
+      title={
+        <span className="inline-flex flex-wrap items-center gap-2">
+          <LinkedInName name={name} href={href ?? ''} />
+          {badge}
+        </span>
+      }
       afterTitle={
         message ? (
           <blockquote className="mt-1 rounded-md border-l-4 border-base-300 bg-base-200/60 p-3 text-sm italic text-base-content/75 whitespace-pre-wrap">

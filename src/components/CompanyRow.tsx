@@ -10,6 +10,7 @@ export function CompanyRow({
   dateTemporal,
   date,
   showSearch,
+  badge,
 }: {
   name: string;
   href?: string;
@@ -17,6 +18,7 @@ export function CompanyRow({
   dateTemporal?: NormalizedTemporal;
   date?: string;
   showSearch?: boolean;
+  badge?: React.ReactNode;
 }) {
   return (
     <RowBase
@@ -26,12 +28,15 @@ export function CompanyRow({
         </div>
       }
       title={
-        <LinkedInName
-          name={name}
-          href={href ?? ''}
-          showSearch={showSearch}
-          searchCategory="companies"
-        />
+        <span className="inline-flex flex-wrap items-center gap-2">
+          <LinkedInName
+            name={name}
+            href={href ?? ''}
+            showSearch={showSearch}
+            searchCategory="companies"
+          />
+          {badge}
+        </span>
       }
       timePrefix={timePrefix}
       dateTemporal={dateTemporal}

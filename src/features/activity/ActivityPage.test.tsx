@@ -725,12 +725,12 @@ describe('ActivityPage', () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByText('Repost')).toBeInTheDocument();
+    expect(screen.getAllByText('Repost')[0]).toBeInTheDocument();
     expect(screen.getByLabelText('Like reaction')).toBeInTheDocument();
 
     view.unmount();
 
-    view = render(
+    render(
       <MemoryRouter
         initialEntries={['/activity?type=security-challenges&from=2025-01-01&to=2025-12-31']}
       >

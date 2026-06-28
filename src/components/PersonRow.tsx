@@ -14,6 +14,7 @@ export function PersonRow({
   showSearch,
   searchCategory,
   avatarClassName,
+  badge,
 }: {
   name: string;
   href?: string;
@@ -25,6 +26,7 @@ export function PersonRow({
   showSearch?: boolean;
   searchCategory?: 'people' | 'companies';
   avatarClassName?: string;
+  badge?: React.ReactNode;
 }) {
   return (
     <RowBase
@@ -36,12 +38,15 @@ export function PersonRow({
         />
       }
       title={
-        <LinkedInName
-          name={name}
-          href={href ?? ''}
-          showSearch={showSearch}
-          searchCategory={searchCategory}
-        />
+        <span className="inline-flex flex-wrap items-center gap-2">
+          <LinkedInName
+            name={name}
+            href={href ?? ''}
+            showSearch={showSearch}
+            searchCategory={searchCategory}
+          />
+          {badge}
+        </span>
       }
       primaryLine={primaryLine}
       secondaryLine={secondaryLine}

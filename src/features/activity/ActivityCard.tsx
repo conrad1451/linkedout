@@ -1,4 +1,5 @@
 import {
+  ExternalLink,
   FileText,
   Hash,
   MessageSquare,
@@ -34,14 +35,21 @@ import type { ReactNode } from 'react';
 import { InitialsAvatar } from '../../components/InitialsAvatar';
 import { RelativeTimeText } from '../../components/RelativeTimeText';
 import { ReactionIcon } from './ReactionIcon';
+import { linkedInProfileSectionUrl, type LinkedInProfileInfo } from '../../lib/linkedin/profile';
 
 interface ActivityCardProps {
   activity: ActivityItem;
   profileName: string;
   compact?: boolean;
+  linkedInProfile?: LinkedInProfileInfo;
 }
 
-export function ActivityCard({ activity, profileName, compact = false }: ActivityCardProps) {
+export function ActivityCard({
+  activity,
+  profileName,
+  compact = false,
+  linkedInProfile,
+}: ActivityCardProps) {
   const body = displayText(activity.text);
 
   if (activity.kind === 'vote') {
@@ -52,9 +60,14 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
             <Vote className="h-5 w-5 opacity-70" />
           </div>
           <div className="min-w-0 flex-1">
-            <h3 className="truncate font-semibold">
-              <ExternalLinkText href={activity.href}>{body || 'Voted in a poll'}</ExternalLinkText>
-            </h3>
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="truncate font-semibold">
+                <ExternalLinkText href={activity.href}>
+                  {body || 'Voted in a poll'}
+                </ExternalLinkText>
+              </h3>
+              <span className="badge badge-xs badge-warning">Vote</span>
+            </div>
             <p className="text-xs opacity-70">
               <RelativeTimeText value={parseActivityDate(activity)} />
             </p>
@@ -73,11 +86,14 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
             <ReactionIcon type={activity.reactionType} className="h-8 w-8 text-3xl" />
           </div>
           <div className="min-w-0 flex-1">
-            <h3 className="truncate font-semibold">
-              <ExternalLinkText href={activity.href}>
-                {reactionBody || 'Reacted to a post'}
-              </ExternalLinkText>
-            </h3>
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="truncate font-semibold">
+                <ExternalLinkText href={activity.href}>
+                  {reactionBody || 'Reacted to a post'}
+                </ExternalLinkText>
+              </h3>
+              <span className="badge badge-xs badge-warning">Reaction</span>
+            </div>
             <p className="text-xs opacity-70">
               <RelativeTimeText value={parseActivityDate(activity)} />
             </p>
@@ -100,12 +116,15 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="truncate font-semibold">{eventName}</h3>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate font-semibold">{eventName}</h3>
+                  <span className="badge badge-xs badge-info">Event</span>
+                </div>
                 {statusSummary ? <p className="text-sm opacity-70">{statusSummary}</p> : null}
                 <p className="text-xs opacity-70">
                   <RelativeTimeText
                     value={parseActivityDate(activity)}
-                    prefix={isFutureTemporal(activity.dateTemporal as any) ? 'Starts' : 'Started'}
+                    prefix={isFutureTemporal(activity.dateTemporal) ? 'Starts' : 'Started'}
                   />
                 </p>
               </div>
@@ -131,6 +150,13 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           showSearch={activity.kind === 'member-follow'}
           searchCategory={'people'}
           avatarClassName={'bg-base-300 text-base-content ring-1 ring-base-300'}
+          badge={
+            activity.kind === 'connection' ? (
+              <span className="badge badge-xs badge-success">Established</span>
+            ) : (
+              <span className="badge badge-xs badge-success">Following</span>
+            )
+          }
         />
       </div>
     );
@@ -146,12 +172,14 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           dateTemporal={activity.dateTemporal}
           date={activity.date}
           showSearch={true}
+          badge={<span className="badge badge-xs badge-success">Company</span>}
         />
       </div>
     );
   }
 
   if (activity.kind === 'invitation-sent' || activity.kind === 'invitation-received') {
+    const isReceived = activity.kind === 'invitation-received';
     return (
       <div className="rounded-box border border-base-300 bg-base-100 shadow-sm overflow-hidden">
         <InvitationRow
@@ -160,7 +188,10 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           message={''}
           dateTemporal={activity.dateTemporal}
           date={activity.date}
-          direction={activity.kind === 'invitation-received' ? 'incoming' : 'outgoing'}
+          direction={isReceived ? 'incoming' : 'outgoing'}
+          badge={
+            <span className="badge badge-xs badge-warning">{isReceived ? 'Received' : 'Sent'}</span>
+          }
         />
       </div>
     );
@@ -168,6 +199,10 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
 
   if (activity.kind === 'recommendation-given' || activity.kind === 'recommendation-received') {
     const name = activity.targetName ?? 'LinkedIn member';
+    const given = activity.kind === 'recommendation-given';
+    const recsUrl = linkedInProfileSectionUrl(linkedInProfile, 'recommendations');
+    const tabIndex = activity.status === 'PENDING' ? 2 : given ? 1 : 0;
+    const recHref = recsUrl ? `${recsUrl}?detailScreenTabIndex=${tabIndex}` : undefined;
 
     return (
       <article className="rounded-box border border-base-300 bg-base-100 shadow-sm overflow-hidden">
@@ -178,19 +213,27 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
             className="bg-base-300 text-base-content ring-1 ring-base-300"
           />
           <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-start justify-between gap-2">
-              <div className="min-w-0">
-                <h3 className="truncate font-semibold">{name}</h3>
-                {activity.headline ? (
-                  <p className="text-sm opacity-70">{activity.headline}</p>
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="truncate font-semibold">
+                  <ExternalLinkText href={recHref}>{name}</ExternalLinkText>
+                  {!recHref && name}
+                </h3>
+                <span className={`badge badge-xs ${given ? 'badge-secondary' : 'badge-accent'}`}>
+                  {given ? 'Given' : 'Received'}
+                </span>
+                {activity.status ? (
+                  <span
+                    className={`badge badge-xs ${activity.status === 'VISIBLE' ? 'badge-success' : activity.status === 'PENDING' ? 'badge-warning' : 'badge-ghost'}`}
+                  >
+                    {titleCase(activity.status)}
+                  </span>
                 ) : null}
-                <p className="mt-1 text-xs opacity-70">
-                  {activity.eyebrow} · {formatDate(activity)}
-                </p>
               </div>
-              {activity.status ? (
-                <span className="badge badge-ghost badge-sm">{titleCase(activity.status)}</span>
-              ) : null}
+              {activity.headline ? <p className="text-sm opacity-70">{activity.headline}</p> : null}
+              <p className="mt-1 text-xs opacity-70">
+                {activity.eyebrow} · {formatDate(activity)}
+              </p>
             </div>
 
             {body ? (
@@ -220,10 +263,13 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="truncate font-semibold">
-                  <ExternalLinkText href={href}>#{raw}</ExternalLinkText>
-                  {!href && `#${raw}`}
-                </h3>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate font-semibold">
+                    <ExternalLinkText href={href}>#{raw}</ExternalLinkText>
+                    {!href && `#${raw}`}
+                  </h3>
+                  <span className="badge badge-xs badge-accent">Hashtag</span>
+                </div>
                 <p className="text-xs opacity-70">
                   <RelativeTimeText value={parseActivityDate(activity)} />
                 </p>
@@ -247,9 +293,12 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="truncate font-semibold">
-                  <ExternalLinkText href={linkedInSearchUrl(term)}>{term}</ExternalLinkText>
-                </h3>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate font-semibold">
+                    <ExternalLinkText href={linkedInSearchUrl(term)}>{term}</ExternalLinkText>
+                  </h3>
+                  <span className="badge badge-xs badge-secondary">Search</span>
+                </div>
                 <p className="text-xs opacity-70">
                   <RelativeTimeText value={parseActivityDate(activity)} />
                 </p>
@@ -273,11 +322,14 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="truncate font-semibold">
-                  <ExternalLinkText href={`https://www.linkedin.com/ad-library/detail/${adId}`}>
-                    {adId}
-                  </ExternalLinkText>
-                </h3>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate font-semibold">
+                    <ExternalLinkText href={`https://www.linkedin.com/ad-library/detail/${adId}`}>
+                      {adId}
+                    </ExternalLinkText>
+                  </h3>
+                  <span className="badge badge-xs badge-error">Ad</span>
+                </div>
                 <p className="text-xs opacity-70">
                   <RelativeTimeText value={parseActivityDate(activity)} />
                 </p>
@@ -301,11 +353,14 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="truncate font-semibold">
-                  <ExternalLinkText href="https://www.linkedin.com/manage/purchases-payments/transactions">
-                    {description}
-                  </ExternalLinkText>
-                </h3>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate font-semibold">
+                    <ExternalLinkText href="https://www.linkedin.com/manage/purchases-payments/transactions">
+                      {description}
+                    </ExternalLinkText>
+                  </h3>
+                  <span className="badge badge-xs badge-accent">Receipt</span>
+                </div>
                 <p className="text-xs opacity-70">
                   <RelativeTimeText value={parseActivityDate(activity)} />
                 </p>
@@ -330,7 +385,10 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="truncate font-semibold">{email}</h3>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate font-semibold">{email}</h3>
+                  <span className="badge badge-xs badge-info">Email</span>
+                </div>
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="text-xs opacity-70">
                     <RelativeTimeText value={parseActivityDate(activity)} />
@@ -371,13 +429,26 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="truncate font-semibold">{challengeType}</h3>
+                  <span className="badge badge-xs badge-error">Challenge</span>
                   {country ? <span className="badge badge-ghost badge-xs">{country}</span> : null}
                 </div>
                 <p className="text-xs opacity-70">
                   <RelativeTimeText value={parseActivityDate(activity)} />
                 </p>
                 {activity.challengeIp ? (
-                  <p className="mt-1 text-xs tabular-nums">IP: {activity.challengeIp}</p>
+                  <p className="mt-1 text-xs tabular-nums">
+                    IP: {activity.challengeIp}{' '}
+                    <a
+                      href={ipGeolocationUrl(activity.challengeIp)}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="inline-flex items-center align-middle hover:text-primary"
+                      title={`Look up IP ${activity.challengeIp}`}
+                      aria-label={`Look up IP ${activity.challengeIp} on ipgeolocation.io`}
+                    >
+                      <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                    </a>
+                  </p>
                 ) : null}
                 {activity.challengeUserAgent ? (
                   <p className="mt-0.5 text-xs opacity-60 break-all">
@@ -402,12 +473,27 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="truncate font-semibold">{activity.targetName || 'Login'}</h3>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate font-semibold">{activity.targetName || 'Login'}</h3>
+                  <span className="badge badge-xs badge-success">Login</span>
+                </div>
                 <p className="text-xs opacity-70">
                   <RelativeTimeText value={parseActivityDate(activity)} />
                 </p>
                 {activity.loginIp ? (
-                  <p className="mt-1 text-xs tabular-nums">IP: {activity.loginIp}</p>
+                  <p className="mt-1 text-xs tabular-nums">
+                    IP: {activity.loginIp}{' '}
+                    <a
+                      href={ipGeolocationUrl(activity.loginIp)}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="inline-flex items-center align-middle hover:text-primary"
+                      title={`Look up IP ${activity.loginIp}`}
+                      aria-label={`Look up IP ${activity.loginIp} on ipgeolocation.io`}
+                    >
+                      <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                    </a>
+                  </p>
                 ) : null}
                 {activity.loginUserAgent ? (
                   <p className="mt-0.5 text-xs opacity-60 break-all">{activity.loginUserAgent}</p>
@@ -432,7 +518,10 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="truncate font-semibold">{verificationType}</h3>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate font-semibold">{verificationType}</h3>
+                  <span className="badge badge-xs badge-warning">Verification</span>
+                </div>
                 <p className="text-xs opacity-70">
                   <RelativeTimeText value={parseActivityDate(activity)} />
                 </p>
@@ -474,6 +563,7 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
                     <ExternalLinkText href={activity.href}>{jobTitle}</ExternalLinkText>
                     {!activity.href && jobTitle}
                   </h3>
+                  <span className="badge badge-xs badge-accent">Saved</span>
                   {company ? <span className="badge badge-ghost badge-xs">{company}</span> : null}
                 </div>
                 <p className="text-xs opacity-70">
@@ -505,6 +595,7 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
                     <ExternalLinkText href={activity.href}>{jobTitle}</ExternalLinkText>
                     {!activity.href && jobTitle}
                   </h3>
+                  <span className="badge badge-xs badge-warning">Applied</span>
                   {company ? <span className="badge badge-ghost badge-xs">{company}</span> : null}
                 </div>
                 <p className="text-xs opacity-70">
@@ -534,7 +625,7 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="truncate font-semibold">{skill}</h3>
-                  <span className={`badge badge-xs ${sent ? 'badge-ghost' : 'badge-success'}`}>
+                  <span className={`badge badge-xs ${sent ? 'badge-secondary' : 'badge-accent'}`}>
                     {sent ? 'Given' : 'Received'}
                   </span>
                 </div>
@@ -567,11 +658,14 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="truncate font-semibold">
-                  <ExternalLinkText href="https://www.linkedin.com/learning/me/my-library/">
-                    {courseTitle}
-                  </ExternalLinkText>
-                </h3>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate font-semibold">
+                    <ExternalLinkText href="https://www.linkedin.com/learning/me/my-library/">
+                      {courseTitle}
+                    </ExternalLinkText>
+                  </h3>
+                  <span className="badge badge-xs badge-success">Learning</span>
+                </div>
                 <p className="text-xs opacity-70">
                   <RelativeTimeText value={parseActivityDate(activity)} />
                 </p>
@@ -601,10 +695,13 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="truncate font-semibold">
-                  <ExternalLinkText href={activity.href}>Saved item</ExternalLinkText>
-                  {!activity.href && 'Saved item'}
-                </h3>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate font-semibold">
+                    <ExternalLinkText href={activity.href}>Saved item</ExternalLinkText>
+                    {!activity.href && 'Saved item'}
+                  </h3>
+                  <span className="badge badge-xs badge-accent">Saved</span>
+                </div>
                 <p className="text-xs opacity-70">
                   <RelativeTimeText value={parseActivityDate(activity)} />
                 </p>
@@ -628,10 +725,13 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="truncate font-semibold">
-                  <ExternalLinkText href={activity.href}>Comment</ExternalLinkText>
-                  {!activity.href && 'Comment'}
-                </h3>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate font-semibold">
+                    <ExternalLinkText href={activity.href}>Comment</ExternalLinkText>
+                    {!activity.href && 'Comment'}
+                  </h3>
+                  <span className="badge badge-xs badge-warning">Comment</span>
+                </div>
                 <p className="text-xs opacity-70">
                   <RelativeTimeText value={parseActivityDate(activity)} />
                 </p>
@@ -665,7 +765,7 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
                     <ExternalLinkText href={activity.href}>{name}</ExternalLinkText>
                     {!activity.href && name}
                   </h3>
-                  <span className={`badge badge-xs ${sent ? 'badge-ghost' : 'badge-success'}`}>
+                  <span className={`badge badge-xs ${sent ? 'badge-secondary' : 'badge-accent'}`}>
                     {sent ? 'Sent' : 'Received'}
                   </span>
                 </div>
@@ -693,10 +793,13 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="truncate font-semibold">
-                  <ExternalLinkText href={activity.href}>Repost</ExternalLinkText>
-                  {!activity.href && 'Repost'}
-                </h3>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="truncate font-semibold">
+                    <ExternalLinkText href={activity.href}>Repost</ExternalLinkText>
+                    {!activity.href && 'Repost'}
+                  </h3>
+                  <span className="badge badge-xs badge-warning">Repost</span>
+                </div>
                 <p className="text-xs opacity-70">
                   <RelativeTimeText value={parseActivityDate(activity)} />
                 </p>
@@ -723,7 +826,7 @@ export function ActivityCard({ activity, profileName, compact = false }: Activit
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="truncate font-semibold">{name}</h3>
-                  <span className="badge badge-ghost badge-xs">Imported</span>
+                  <span className="badge badge-error badge-xs">Imported</span>
                 </div>
                 <p className="text-xs opacity-70">
                   <RelativeTimeText value={parseActivityDate(activity)} />
@@ -974,6 +1077,10 @@ function searchTerm(text: string): string {
     term = term.slice(1, -1);
   }
   return term || text;
+}
+
+function ipGeolocationUrl(ip: string): string {
+  return `https://ipgeolocation.io/what-is-my-ip/${encodeURIComponent(ip)}`;
 }
 
 function parseActivityDate(activity: ActivityItem): Date | number | string {
