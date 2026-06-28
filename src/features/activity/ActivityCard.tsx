@@ -388,24 +388,20 @@ export function ActivityCard({
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="truncate font-semibold">{email}</h3>
                   <span className="badge badge-xs badge-info">Email</span>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <p className="text-xs opacity-70">
-                    <RelativeTimeText value={parseActivityDate(activity)} />
-                  </p>
-                  {activity.status ? (
-                    <span className="flex flex-wrap gap-1">
-                      {activity.status.split(' · ').map((tag) => (
+                  {activity.status
+                    ? activity.status.split(' · ').map((tag) => (
                         <span
                           key={tag}
                           className={`badge badge-xs ${tag === 'primary' ? 'badge-success' : 'badge-ghost badge-success'}`}
                         >
                           {tag}
                         </span>
-                      ))}
-                    </span>
-                  ) : null}
+                      ))
+                    : null}
                 </div>
+                <p className="text-xs opacity-70">
+                  <RelativeTimeText value={parseActivityDate(activity)} />
+                </p>
               </div>
             </div>
           </div>
