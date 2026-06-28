@@ -610,7 +610,7 @@ describe('ActivityPage', () => {
             kind: 'reaction',
             date: '2025-01-07 00:00:00',
             dateTemporal: parseTemporalValue('2025-01-07 00:00:00'),
-            text: 'Reacted with Like',
+            text: 'Like',
             eyebrow: 'Reacted',
           },
           {

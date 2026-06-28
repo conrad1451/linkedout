@@ -11,7 +11,7 @@ describe('ActivityCard', () => {
       kind: 'reaction',
       date: '2025-12-15 21:54:39',
       dateTemporal: parseTemporalValue('2025-12-15 21:54:39'),
-      text: 'Reacted with Praise',
+      text: 'Praise',
       eyebrow: 'Reacted',
       href: 'https://www.linkedin.com/feed/update/example',
       reactionType: 'Praise',
@@ -20,7 +20,7 @@ describe('ActivityCard', () => {
     render(<ActivityCard activity={activity} profileName="Ada Lovelace" />);
 
     expect(screen.getByRole('img', { name: 'Celebrate reaction' })).toHaveTextContent('👏');
-    expect(screen.getByRole('link', { name: /Reacted with Praise/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Praise' })).toBeInTheDocument();
     expect(screen.queryByText('Ada Lovelace')).not.toBeInTheDocument();
   });
 

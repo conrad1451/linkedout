@@ -257,7 +257,7 @@ export function makeActivities(input: {
       date: text(row, 'Date'),
       dateTemporal: row.__dates?.Date,
       href: text(row, 'Link'),
-      text: reactionType ? `Reacted with ${reactionType}` : 'Reacted to a post',
+      text: reactionType || 'Reacted to a post',
       eyebrow: 'Reacted',
       reactionType,
     };
