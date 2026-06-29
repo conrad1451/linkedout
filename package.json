@@ -16,7 +16,7 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc -b --noEmit",
     "test-data:zip": "node scripts/zip-test-data.mjs",
-    "pack": "vite build --config vite.extension.config.ts && cp extension/manifest.json extension/background.js dist-extension/"
+    "pack": "vite build --config vite.extension.config.ts && cp extension/background.js dist-extension/"
   },
   "dependencies": {
     "fflate": "^0.8.3",

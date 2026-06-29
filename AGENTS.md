@@ -37,7 +37,7 @@ The application is a client-only SPA — no server, no backend.
 - `src/features/<name>/` — feature folders. Each owns its routes, components, and helpers. Cross-feature shared UI lives in `src/components/`, hooks in `src/hooks/`.
 - `src/app/` — providers, router, layout shell.
 - `src/platform/` — cross-target shims (storage estimation, runtime detection). Used by both the web build and the Chrome extension build.
-- `extension/` — Chrome extension manifest (`manifest.json`) and background service worker (`background.js`). Copied into `dist-extension/` by `npm run pack`.
+- `extension/` — Chrome extension background service worker (`background.js`). Copied into `dist-extension/` by `npm run pack`. The extension manifest is generated at build time by a custom Vite plugin (see [Extension conventions](#extension-conventions)).
 - `dist/` — web build output (gitignored)
 - `dist-extension/` — unpacked Chrome extension build output (gitignored)
 
@@ -62,7 +62,8 @@ The project has two separate build configurations:
 - Uses `createHashRouter` — hash URLs: `index.html#/profile`, `index.html#/activity`, etc.
 - Asset paths are relative (`./` prefix) — required for `chrome-extension://` origin
 - Build config: `vite.extension.config.ts` sets `base: './'`, `outDir: 'dist-extension'`, and defines `import.meta.env.VITE_EXTENSION = 'true'`
-- After build, `extension/manifest.json` and `extension/background.js` are copied into `dist-extension/`
+- The `generateManifest` Vite plugin in `vite.extension.config.ts` reads `version` and `description` from `package.json` and writes `dist-extension/manifest.json` at build time
+- After build, `extension/background.js` is copied into `dist-extension/`
 - Load in Chrome via `chrome://extensions` → Developer mode → Load unpacked → select `dist-extension/`
 
 ## Extension conventions
@@ -72,6 +73,7 @@ The project has two separate build configurations:
 - **Icons**: The `manifest.json` references the same branding assets as the web build (`out-logo.png`, etc.) — they're in `public/` and get copied into both build outputs by Vite.
 - **Permissions**: The extension only requests `"storage"` (needed for IndexedDB). No other permissions are required — the data never leaves the browser.
 - **Background**: `extension/background.js` is a minimal service worker that opens `index.html` in a new tab when the user clicks the extension icon.
+- **Manifest generation**: `extension/manifest.json` is generated at build time by the `generateManifest()` Vite plugin in `vite.extension.config.ts`. It reads `version` and `description` from `package.json` so they only need to be maintained in one place. The display name is hardcoded as `LinkedOut` in the plugin. The generated manifest is written directly to `dist-extension/manifest.json` — there is no checked-in source copy.
 - **Cross-target shims**: `src/platform/runtime.ts` exports `isExtension()` for runtime detection; `src/platform/storage.ts` exports `getStorageEstimate()` for quota checks. Both work in web and extension contexts.
 
 ## Data conventions
