@@ -31,7 +31,7 @@ import {
   Vote,
   type LucideIcon,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useRef, useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useActiveImport } from '../../app/useImports';
 import { EmptyState } from '../../components/EmptyState';
@@ -47,6 +47,7 @@ import {
   timestampInPeriod,
   type TemporalMosaicPeriod,
 } from '../../lib/datetime/yearMosaic';
+import { searchActivities } from '../../lib/search/activitySearch';
 import { ActivityCard } from './ActivityCard';
 import { activityDateTime, fullName, type ActivityItem, type ActivityKind } from '../profile/model';
 import { useProfileData, type ProfileData } from '../profile/useProfileData';
@@ -116,10 +117,56 @@ export function ActivityPage() {
   return <ActivityPageContent data={data} />;
 }
 
+function SearchBar({ onSubmit }: { onSubmit: (value: string) => void }) {
+  const [draft, setDraft] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const input = inputRef.current;
+    if (!input) return;
+    const handleSearch = () => {
+      // The native "search" event fires on both Enter and the clear (×) button.
+      // Only reset when the input is empty (clear button clicked).
+      if (!input.value) {
+        setDraft('');
+        onSubmit('');
+      }
+    };
+    input.addEventListener('search', handleSearch);
+    return () => input.removeEventListener('search', handleSearch);
+  }, [onSubmit]);
+
+  return (
+    <div className="join w-full sm:w-72">
+      <input
+        ref={inputRef}
+        type="search"
+        className="input input-bordered input-sm join-item w-full"
+        placeholder="Search activity…"
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') onSubmit(draft.trim());
+        }}
+        aria-label="Search activity"
+      />
+      <button
+        type="button"
+        className="btn btn-sm btn-primary join-item"
+        onClick={() => onSubmit(draft.trim())}
+        aria-label="Search"
+      >
+        <Search className="h-4 w-4" aria-hidden="true" />
+      </button>
+    </div>
+  );
+}
+
 function ActivityPageContent({ data }: { data: ProfileData }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [page, setPage] = useState(0);
   const filter = filterFromParams(searchParams.get('type'));
+  const [query, setQuery] = useState('');
 
   const name = fullName(data.profile);
   const years = availableCalendarYears(data.activity, activityDateTime);
@@ -149,8 +196,14 @@ function ActivityPageContent({ data }: { data: ProfileData }) {
     selectedYear === 'all' || !effectivePeriod
       ? typedYearActivities
       : filterByPeriod(typedYearActivities, effectivePeriod);
-  const pageRows = filtered.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
+  const searchedFiltered = useMemo(() => searchActivities(filtered, query), [filtered, query]);
+  const pageRows = searchedFiltered.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
   const yearOptions: Array<number | 'all'> = ['all', ...years];
+
+  function submitSearch(value: string) {
+    setPage(0);
+    setQuery(value);
+  }
 
   const selectedIndex = selectedYear === 'all' ? -1 : years.indexOf(selectedYear as number);
 
@@ -240,7 +293,10 @@ function ActivityPageContent({ data }: { data: ProfileData }) {
           </div>
 
           <div className="mt-4 min-w-0 space-y-4">
-            <div className="flex flex-wrap items-center gap-3">{yearControls}</div>
+            <div className="flex flex-wrap items-center gap-3">
+              <SearchBar onSubmit={submitSearch} />
+              {yearControls}
+            </div>
 
             {selectedYear === 'all' ? (
               <p className="text-sm opacity-70">
@@ -267,7 +323,9 @@ function ActivityPageContent({ data }: { data: ProfileData }) {
         </section>
 
         {pageRows.length === 0 ? (
-          <EmptyState title={emptyTitle(filter, selectedPeriod)} />
+          <EmptyState
+            title={query ? `No results for "${query}"` : emptyTitle(filter, selectedPeriod)}
+          />
         ) : (
           <div className="space-y-4">
             {pageRows.map((activity) => (
@@ -283,7 +341,7 @@ function ActivityPageContent({ data }: { data: ProfileData }) {
         <Pagination
           page={page}
           pageSize={PAGE_SIZE}
-          total={filtered.length}
+          total={searchedFiltered.length}
           onPageChange={setPage}
         />
       </main>
